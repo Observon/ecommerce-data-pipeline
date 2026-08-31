@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce-pipeline-postgres
+    environment:
+      POSTGRES_DB: ecommerce_dw
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: ecommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
