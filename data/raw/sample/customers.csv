@@ -1,0 +1,5 @@
+customer_id,customer_unique_id,customer_zip_code_prefix,customer_city,customer_state
+cus_001,unique_001,13010,Campinas,SP
+cus_002,unique_002,20040,Rio de Janeiro,RJ
+cus_003,unique_003,30130,Belo Horizonte,MG
+

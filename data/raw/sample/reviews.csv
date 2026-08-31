@@ -1,0 +1,4 @@
+review_id,order_id,review_score,review_comment_title,review_comment_message,review_creation_date,review_answer_timestamp
+rev_001,ord_001,5,Excelente,Entrega rapida e produto conforme descricao.,2026-08-06 00:00:00,2026-08-06 08:00:00
+rev_002,ord_002,4,Bom,Produto correto mas entrega poderia ser mais rapida.,2026-08-11 00:00:00,2026-08-11 10:00:00
+

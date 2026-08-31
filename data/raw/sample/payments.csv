@@ -1,0 +1,5 @@
+order_id,payment_sequential,payment_type,payment_installments,payment_value
+ord_001,1,credit_card,2,224.80
+ord_002,1,pix,1,172.40
+ord_003,1,boleto,1,0.00
+

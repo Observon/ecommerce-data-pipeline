@@ -1,0 +1,5 @@
+order_id,order_item_id,product_id,shipping_limit_date,price,freight_value
+ord_001,1,prd_001,2026-08-02 23:59:59,149.90,15.00
+ord_001,2,prd_002,2026-08-02 23:59:59,49.90,10.00
+ord_002,1,prd_001,2026-08-04 23:59:59,149.90,22.50
+

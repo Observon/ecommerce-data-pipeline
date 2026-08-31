@@ -1,0 +1,5 @@
+order_id,customer_id,order_status,order_purchase_timestamp,order_approved_at,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date
+ord_001,cus_001,delivered,2026-08-01 10:30:00,2026-08-01 11:00:00,2026-08-02 09:00:00,2026-08-05 14:00:00,2026-08-08 23:59:59
+ord_002,cus_002,delivered,2026-08-03 15:10:00,2026-08-03 15:25:00,2026-08-04 10:00:00,2026-08-10 16:20:00,2026-08-11 23:59:59
+ord_003,cus_003,canceled,2026-08-04 09:00:00,,, ,2026-08-12 23:59:59
+
