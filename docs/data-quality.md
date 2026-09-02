@@ -11,5 +11,4 @@ As regras abaixo serao aplicadas antes da publicacao em `data/processed` e antes
 | payments | chave composta unica; `payment_value >= 0`. |
 | reviews | `review_score` entre 1 e 5. |
 
-O processamento produzirá `data_quality_report.json` com linhas recebidas, validas e invalidas, duplicidades, nulos, falhas de chave referencial e status (`PASS`, `WARNING` ou `FAIL`). Linhas invalidas serao mantidas em uma area de quarentena, nunca descartadas silenciosamente.
-
+O processamento produz `data_quality_report.json` com linhas recebidas, validas e invalidas, duplicidades, nulos, falhas de chave referencial e status (`PASS`, `WARNING` ou `FAIL`). Linhas invalidas sao mantidas em `data/processed/quarantine/`, nunca descartadas silenciosamente.

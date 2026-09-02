@@ -43,10 +43,10 @@ docker compose up -d
 
 ```text
 data/raw/             Dados recebidos; nunca alterados pelo pipeline
-data/processed/       Saida tipada em Parquet (proxima etapa)
+data/processed/       Saida tipada em Parquet e relatorio de qualidade
 src/ingestion/        Leitura, validacao estrutural e logs
-src/transformation/   Padronizacao e atributos derivados (proxima etapa)
-src/quality/          Regras e relatorios (proxima etapa)
+src/transformation/   Padronizacao e atributos derivados
+src/quality/          Regras, quarentena e relatorios
 src/database/         Carga PostgreSQL (proxima etapa)
 sql/                  DDL e consultas de negocio
 docs/                 Arquitetura, modelo e qualidade
@@ -66,7 +66,6 @@ tests/                Testes pytest
 
 ## Proximas etapas
 
-1. Transformacoes, regras de qualidade e gravacao Parquet.
-2. Carga idempotente no PostgreSQL e camada analitica.
-3. Integracao S3 para RAW e PROCESSED.
-4. Queries de negocio, notebook e testes automatizados.
+1. Carga idempotente no PostgreSQL e camada analitica.
+2. Integracao S3 para RAW e PROCESSED.
+3. Queries de negocio, notebook e testes automatizados.

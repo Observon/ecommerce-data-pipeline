@@ -11,7 +11,7 @@ Python / Pandas (src.ingestion)
       +--> validacao estrutural e logs
       |
       v
-Transformacao e qualidade (proxima etapa)
+Transformacao e qualidade
       |
       v
 Parquet (data/processed) --> PostgreSQL --> SQL / notebook
@@ -33,4 +33,3 @@ Fonte CSV/API --> Python --> S3/raw (imutavel) --> Pandas + qualidade
 ```
 
 A camada RAW preserva os arquivos recebidos sem alteracao. Isso permite auditoria e reprocessamento quando regras de transformacao mudarem. A camada PROCESSED tera dados tipados, padronizados e em Parquet, formato colunar apropriado para leituras analiticas.
-

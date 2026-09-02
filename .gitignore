@@ -5,8 +5,9 @@ __pycache__/
 *.py[cod]
 data/processed/*.parquet
 data/processed/*.json
+data/processed/quarantine/
+data/processed/quarantine/
 data/raw/*.csv
 !data/raw/.gitkeep
 !data/raw/sample/
 !data/raw/sample/*.csv
-
