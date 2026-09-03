@@ -13,6 +13,7 @@ O modelo e o contrato de colunas seguem o **Brazilian E-Commerce Public Dataset 
 ## Arquitetura
 
 Consulte [a arquitetura](docs/architecture.md). O modelo relacional esta em [data-model.md](docs/data-model.md) e as regras de qualidade em [data-quality.md](docs/data-quality.md).
+O roadmap atualizado esta em [implementation-plan.md](docs/implementation-plan.md).
 
 ## Tecnologias
 
@@ -32,6 +33,17 @@ O comando usa o recorte versionado em `data/raw/sample`. Para uma carga real, in
 ```powershell
 python -m src.pipeline --raw-directory data\raw
 ```
+
+### Dataset Olist
+
+Baixe os CSVs oficiais para a camada RAW, preservando seus nomes e conteudo originais:
+
+```powershell
+python -m src.ingestion.download
+python -m src.pipeline --raw-directory data\raw\olist
+```
+
+O download requer acesso ao Kaggle. Os arquivos recebidos nao sao versionados pelo Git.
 
 Para iniciar o PostgreSQL local quando a etapa de carga estiver pronta:
 
