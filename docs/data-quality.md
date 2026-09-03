@@ -9,6 +9,6 @@ As regras abaixo serao aplicadas antes da publicacao em `data/processed` e antes
 | order_items | chave composta unica; `price >= 0`; `freight_value >= 0`. |
 | products | `product_id` unico e nao nulo. |
 | payments | chave composta unica; `payment_value >= 0`. |
-| reviews | `review_score` entre 1 e 5. |
+| reviews | Chave composta (`review_id`, `order_id`) unica; `review_score` entre 1 e 5. |
 
 O processamento produz `data_quality_report.json` com linhas recebidas, validas e invalidas, duplicidades, nulos, falhas de chave referencial e status (`PASS`, `WARNING` ou `FAIL`). Linhas invalidas sao mantidas em `data/processed/quarantine/`, nunca descartadas silenciosamente.

@@ -72,7 +72,7 @@ def validate_datasets(datasets: dict[str, pd.DataFrame]) -> QualityResult:
 
     reviews = datasets["reviews"]
     add_rule("reviews", "missing_ids", _missing_key(reviews, ["review_id", "order_id"]))
-    add_rule("reviews", "duplicates", reviews.duplicated(["review_id"], keep=False))
+    add_rule("reviews", "duplicates", reviews.duplicated(["review_id", "order_id"], keep=False))
     add_rule("reviews", "invalid_review_scores", reviews["review_score"].isna() | ~reviews["review_score"].between(1, 5))
     add_rule("reviews", "referential_integrity_violations", ~reviews["order_id"].isin(valid_order_ids))
 
