@@ -20,10 +20,10 @@ Parquet (data/processed) --> PostgreSQL --> SQL / notebook
 ## Arquitetura alvo com S3
 
 ```text
-Fonte CSV/API --> Python --> S3/raw (imutavel) --> Pandas + qualidade
+Fonte CSV/API --> Python --> S3/raw/olist (imutavel) --> Pandas + qualidade
                                                     |
                                                     v
-                                               S3/processed (Parquet)
+                                               S3/processed (Parquet, quarentena e relatorio)
                                                     |
                                                     v
                                                PostgreSQL warehouse

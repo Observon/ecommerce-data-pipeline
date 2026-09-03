@@ -17,7 +17,7 @@ O roadmap atualizado esta em [implementation-plan.md](docs/implementation-plan.m
 
 ## Tecnologias
 
-Python, Pandas, PyArrow/Parquet, PostgreSQL, SQL, pytest, Docker Compose, AWS S3 (etapa posterior).
+Python, Pandas, PyArrow/Parquet, PostgreSQL, SQL, pytest, Docker Compose e AWS S3.
 
 ## Como executar o MVP
 
@@ -44,6 +44,16 @@ python -m src.pipeline --raw-directory data\raw\olist
 ```
 
 O download requer acesso ao Kaggle. Os arquivos recebidos nao sao versionados pelo Git.
+
+### Publicacao no AWS S3
+
+Defina `S3_BUCKET`, `AWS_REGION`, `S3_RAW_PREFIX` e `S3_PROCESSED_PREFIX` no arquivo `.env`. O pipeline continua local por padrao; use a opcao abaixo para publicar os artefatos:
+
+```powershell
+python -m src.pipeline --raw-directory data\raw\olist --upload-s3
+```
+
+Os CSVs originais sao enviados para `raw/olist/`. Parquets, o relatorio JSON e arquivos de quarentena sao enviados para `processed/`, preservando caminhos relativos e sem alterar a camada RAW.
 
 Para iniciar o PostgreSQL local quando a etapa de carga estiver pronta:
 
@@ -79,5 +89,5 @@ tests/                Testes pytest
 ## Proximas etapas
 
 1. Carga idempotente no PostgreSQL e camada analitica.
-2. Integracao S3 para RAW e PROCESSED.
+2. Ampliar o modelo com sellers, geolocalizacao e traducao de categorias.
 3. Queries de negocio, notebook e testes automatizados.

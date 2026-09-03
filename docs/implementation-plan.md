@@ -7,13 +7,14 @@
 - O processamento produz Parquet, quarentena e relatorio de qualidade.
 - A execucao contra o dataset completo recebeu 99.441 pedidos e 112.650 itens. A chave correta de `reviews` e (`review_id`, `order_id`), pois `review_id` nao e globalmente unico.
 
-## Proxima entrega: Data Lake S3
+## Data Lake S3 (implementado; provisionamento pendente)
 
-1. Criar configuracao para bucket e prefixos `raw/` e `processed/`.
-2. Enviar os CSVs originais ao prefixo RAW sem alteracao.
-3. Enviar Parquets, quarentena e relatorio JSON ao prefixo PROCESSED.
-4. Manter execucao local como fallback, sem exigir credenciais AWS nos testes.
-5. Testar a interface S3 com mocks, sem expor credenciais no repositorio.
+1. Configuracao para bucket, regiao e prefixos por `.env`.
+2. Upload dos CSVs originais ao prefixo RAW sem alteracao.
+3. Upload de Parquets, quarentena e relatorio JSON ao prefixo PROCESSED.
+4. Execucao local permanece como fallback; S3 e ativado somente por `--upload-s3`.
+5. Interface coberta por testes com cliente S3 simulado, sem credenciais no repositorio.
+6. Pendente: criar ou informar o bucket AWS e conceder permissao `s3:PutObject` para executar o upload real.
 
 ## Entrega seguinte: ampliar modelo Olist
 
