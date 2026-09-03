@@ -9,6 +9,7 @@ from pathlib import Path
 
 from src.ingestion.extract import ExtractionError, extract_csvs
 from src.quality.checks import validate_datasets
+from src.storage.s3 import S3Publisher, S3Settings
 from src.transformation.transform import transform_datasets
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -33,7 +34,11 @@ def write_processed_data(processed_directory: Path, valid_datasets: dict, invali
     (processed_directory / "data_quality_report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
-def main(raw_directory: Path = SAMPLE_RAW_DIRECTORY, processed_directory: Path = PROCESSED_DIRECTORY) -> None:
+def main(
+    raw_directory: Path = SAMPLE_RAW_DIRECTORY,
+    processed_directory: Path = PROCESSED_DIRECTORY,
+    upload_s3: bool = False,
+) -> None:
     configure_logging()
     logger = logging.getLogger(__name__)
     logger.info("Starting pipeline")
@@ -48,6 +53,11 @@ def main(raw_directory: Path = SAMPLE_RAW_DIRECTORY, processed_directory: Path =
     logger.info("Running data quality checks: %s", quality_result.report["overall_status"])
     write_processed_data(processed_directory, quality_result.valid_datasets, quality_result.invalid_datasets, quality_result.report)
     logger.info("Processed data written to %s", processed_directory)
+    if upload_s3:
+        publisher = S3Publisher(S3Settings.from_environment())
+        raw_keys = publisher.upload_raw_directory(raw_directory)
+        processed_keys = publisher.upload_processed_directory(processed_directory)
+        logger.info("Uploaded %s RAW and %s PROCESSED artifacts to S3", len(raw_keys), len(processed_keys))
     logger.info("Pipeline completed successfully")
 
 
@@ -60,5 +70,6 @@ if __name__ == "__main__":
         help="Directory containing the six source CSV files.",
     )
     parser.add_argument("--processed-directory", type=Path, default=PROCESSED_DIRECTORY, help="Directory for Parquet files and the quality report.")
+    parser.add_argument("--upload-s3", action="store_true", help="Publish RAW and PROCESSED artifacts to the configured S3 bucket.")
     arguments = parser.parse_args()
-    main(arguments.raw_directory, arguments.processed_directory)
+    main(arguments.raw_directory, arguments.processed_directory, arguments.upload_s3)
