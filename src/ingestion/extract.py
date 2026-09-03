@@ -18,6 +18,15 @@ DATASETS: dict[str, set[str]] = {
     "reviews": {"review_id", "order_id", "review_score"},
 }
 
+SOURCE_FILENAMES: dict[str, tuple[str, ...]] = {
+    "customers": ("customers.csv", "olist_customers_dataset.csv"),
+    "orders": ("orders.csv", "olist_orders_dataset.csv"),
+    "order_items": ("order_items.csv", "olist_order_items_dataset.csv"),
+    "products": ("products.csv", "olist_products_dataset.csv"),
+    "payments": ("payments.csv", "olist_order_payments_dataset.csv"),
+    "reviews": ("reviews.csv", "olist_order_reviews_dataset.csv"),
+}
+
 
 class ExtractionError(RuntimeError):
     """Raised when a raw dataset cannot be safely extracted."""
@@ -28,9 +37,13 @@ def extract_csvs(raw_directory: Path) -> dict[str, pd.DataFrame]:
     datasets: dict[str, pd.DataFrame] = {}
 
     for dataset, required_columns in DATASETS.items():
-        file_path = raw_directory / f"{dataset}.csv"
-        if not file_path.is_file():
-            raise ExtractionError(f"Missing required raw file: {file_path}")
+        file_path = next(
+            (raw_directory / filename for filename in SOURCE_FILENAMES[dataset] if (raw_directory / filename).is_file()),
+            None,
+        )
+        if file_path is None:
+            expected_files = ", ".join(SOURCE_FILENAMES[dataset])
+            raise ExtractionError(f"Missing required raw file for {dataset}. Expected one of: {expected_files}")
 
         dataframe = pd.read_csv(file_path)
         missing_columns = required_columns.difference(dataframe.columns)
@@ -42,4 +55,3 @@ def extract_csvs(raw_directory: Path) -> dict[str, pd.DataFrame]:
         datasets[dataset] = dataframe
 
     return datasets
-

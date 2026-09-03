@@ -8,6 +8,7 @@ data/processed/*.json
 data/processed/quarantine/
 data/processed/quarantine/
 data/raw/*.csv
+data/raw/olist/
 !data/raw/.gitkeep
 !data/raw/sample/
 !data/raw/sample/*.csv
