@@ -19,7 +19,7 @@ O roadmap atualizado esta em [implementation-plan.md](docs/implementation-plan.m
 
 Python, Pandas, PyArrow/Parquet, PostgreSQL, SQL, pytest, Docker Compose e AWS S3.
 
-## Como executar o MVP
+## Como executar o pipeline local
 
 ```powershell
 python -m venv .venv
@@ -28,11 +28,13 @@ pip install -r requirements.txt
 python -m src.pipeline
 ```
 
-O comando usa o recorte versionado em `data/raw/sample`. Para uma carga real, informe o diretorio que contem os seis CSVs:
+O comando usa o recorte versionado em `data/raw/sample`. Para uma carga real, informe o diretorio que contem os seis CSVs obrigatorios:
 
 ```powershell
 python -m src.pipeline --raw-directory data\raw
 ```
+
+As fontes `sellers`, `geolocation` e `product_category_name_translation` sao opcionais. Quando presentes no diretorio informado, elas tambem sao extraidas, transformadas e publicadas. A geolocalizacao e curada para uma linha por CEP usando a mediana das coordenadas.
 
 ### Dataset Olist
 
@@ -55,10 +57,16 @@ python -m src.pipeline --raw-directory data\raw\olist --upload-s3
 
 Os CSVs originais sao enviados para `raw/olist/`. Parquets, o relatorio JSON e arquivos de quarentena sao enviados para `processed/`, preservando caminhos relativos e sem alterar a camada RAW.
 
-Para iniciar o PostgreSQL local quando a etapa de carga estiver pronta:
+Para iniciar o PostgreSQL local, atualmente usado apenas como infraestrutura preparada para a proxima etapa:
 
 ```powershell
 docker compose up -d
+```
+
+O schema pode ser aplicado manualmente depois que o banco estiver disponivel:
+
+```powershell
+Get-Content sql\00_operational_schema.sql | docker compose exec -T postgres psql -U ecommerce -d ecommerce_dw
 ```
 
 ## Estrutura
@@ -86,8 +94,15 @@ tests/                Testes pytest
 - O modelo operacional normalizado e separado da futura camada estrela analitica.
 - A falha de contrato na ingestao interrompe o pipeline de forma explicita, com log de erro.
 
-## Proximas etapas
+## Pendencias e proxima sequencia
 
-1. Carga idempotente no PostgreSQL e camada analitica.
-2. Ampliar o modelo com sellers, geolocalizacao e traducao de categorias.
-3. Queries de negocio, notebook e testes automatizados.
+O status detalhado, os criterios de aceite e as dependencias estao em [implementation-plan.md](docs/implementation-plan.md). A sequencia recomendada e:
+
+1. **PostgreSQL:** implementar carga idempotente e transacional dos Parquets validados.
+2. **Modelo analitico:** criar dimensoes, fato de itens e estrategia para evitar duplicacao de receita ao cruzar pagamentos.
+3. **S3 real:** configurar bucket, regiao, credenciais fora do repositorio e permissao minima `s3:PutObject`; o upload ja esta implementado e testado com cliente simulado.
+4. **Analise:** ampliar `sql/01_revenue.sql` e criar notebook com perguntas de negocio e insights reproduziveis.
+5. **Confiabilidade:** adicionar testes de integracao com PostgreSQL, teste de execucao end-to-end e observabilidade basica.
+6. **Entrega:** atualizar evidencias de execucao, revisar o README e documentar operacao e recuperacao de falhas.
+
+Itens ja implementados e que nao devem voltar para a fila: ingestao dos seis datasets obrigatorios, suporte as tres fontes opcionais, transformacoes tipadas, curadoria de geolocalizacao, Parquet, quarentena, relatorio de qualidade e publicacao S3 com cliente simulado.
