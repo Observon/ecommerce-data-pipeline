@@ -39,8 +39,15 @@ def transform_datasets(datasets: dict[str, pd.DataFrame]) -> dict[str, pd.DataFr
     products = transformed["products"]
     products["product_id"] = _clean_text(products["product_id"])
     products["product_category_name"] = _clean_text(products["product_category_name"])
-    for column in products.columns.difference(["product_id", "product_category_name"]):
+    for column in products.columns.difference(["product_id", "product_category_name", "product_category_name_english"]):
         products[column] = pd.to_numeric(products[column], errors="coerce")
+
+    if "category_translation" in transformed:
+        translation = transformed["category_translation"]
+        translation["product_category_name"] = _clean_text(translation["product_category_name"])
+        translation["product_category_name_english"] = _clean_text(translation["product_category_name_english"])
+        category_map = translation.set_index("product_category_name")["product_category_name_english"]
+        products["product_category_name_english"] = products["product_category_name"].map(category_map)
 
     orders = transformed["orders"]
     orders["order_id"] = _clean_text(orders["order_id"])
@@ -50,6 +57,8 @@ def transform_datasets(datasets: dict[str, pd.DataFrame]) -> dict[str, pd.DataFr
     order_items = transformed["order_items"]
     for column in ("order_id", "product_id"):
         order_items[column] = _clean_text(order_items[column])
+    if "seller_id" in order_items:
+        order_items["seller_id"] = _clean_text(order_items["seller_id"])
     order_items["order_item_id"] = pd.to_numeric(order_items["order_item_id"], errors="coerce").astype("Int64")
     for column in ("price", "freight_value"):
         order_items[column] = pd.to_numeric(order_items[column], errors="coerce")
@@ -65,6 +74,33 @@ def transform_datasets(datasets: dict[str, pd.DataFrame]) -> dict[str, pd.DataFr
     reviews["review_id"] = _clean_text(reviews["review_id"])
     reviews["order_id"] = _clean_text(reviews["order_id"])
     reviews["review_score"] = pd.to_numeric(reviews["review_score"], errors="coerce").astype("Int64")
+
+    if "sellers" in transformed:
+        sellers = transformed["sellers"]
+        sellers["seller_id"] = _clean_text(sellers["seller_id"])
+        sellers["seller_city"] = _clean_text(sellers["seller_city"])
+        sellers["seller_state"] = _clean_text(sellers["seller_state"], uppercase=True)
+        sellers["seller_zip_code_prefix"] = pd.to_numeric(sellers["seller_zip_code_prefix"], errors="coerce").astype("Int64")
+
+    if "geolocation" in transformed:
+        geolocation = transformed["geolocation"]
+        geolocation["geolocation_zip_code_prefix"] = pd.to_numeric(
+            geolocation["geolocation_zip_code_prefix"], errors="coerce"
+        ).astype("Int64")
+        geolocation["geolocation_lat"] = pd.to_numeric(geolocation["geolocation_lat"], errors="coerce")
+        geolocation["geolocation_lng"] = pd.to_numeric(geolocation["geolocation_lng"], errors="coerce")
+        geolocation["geolocation_city"] = _clean_text(geolocation["geolocation_city"])
+        geolocation["geolocation_state"] = _clean_text(geolocation["geolocation_state"], uppercase=True)
+        transformed["geolocation"] = (
+            geolocation.dropna(subset=["geolocation_zip_code_prefix", "geolocation_lat", "geolocation_lng"])
+            .groupby("geolocation_zip_code_prefix", as_index=False)
+            .agg(
+                geolocation_lat=("geolocation_lat", "median"),
+                geolocation_lng=("geolocation_lng", "median"),
+                geolocation_city=("geolocation_city", "first"),
+                geolocation_state=("geolocation_state", "first"),
+            )
+        )
 
     totals = order_items.assign(line_total=order_items["price"] + order_items["freight_value"])
     order_totals = totals.groupby("order_id", dropna=False)["line_total"].sum().rename("order_total")

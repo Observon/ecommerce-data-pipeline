@@ -6,9 +6,25 @@ CREATE TABLE IF NOT EXISTS customers (
     customer_state CHAR(2) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS sellers (
+    seller_id TEXT PRIMARY KEY,
+    seller_zip_code_prefix INTEGER,
+    seller_city TEXT NOT NULL,
+    seller_state CHAR(2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS locations (
+    zip_code_prefix INTEGER PRIMARY KEY,
+    latitude NUMERIC(10, 7) NOT NULL,
+    longitude NUMERIC(10, 7) NOT NULL,
+    city TEXT,
+    state CHAR(2)
+);
+
 CREATE TABLE IF NOT EXISTS products (
     product_id TEXT PRIMARY KEY,
     product_category_name TEXT,
+    product_category_name_english TEXT,
     product_name_length INTEGER,
     product_description_length INTEGER,
     product_photos_qty INTEGER,
@@ -33,6 +49,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     order_id TEXT NOT NULL REFERENCES orders(order_id),
     order_item_id INTEGER NOT NULL,
     product_id TEXT NOT NULL REFERENCES products(product_id),
+    seller_id TEXT REFERENCES sellers(seller_id),
     shipping_limit_date TIMESTAMP,
     price NUMERIC(12, 2) NOT NULL CHECK (price >= 0),
     freight_value NUMERIC(12, 2) NOT NULL CHECK (freight_value >= 0),

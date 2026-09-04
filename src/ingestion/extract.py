@@ -18,6 +18,18 @@ DATASETS: dict[str, set[str]] = {
     "reviews": {"review_id", "order_id", "review_score"},
 }
 
+OPTIONAL_DATASETS: dict[str, set[str]] = {
+    "sellers": {"seller_id", "seller_zip_code_prefix", "seller_city", "seller_state"},
+    "geolocation": {
+        "geolocation_zip_code_prefix",
+        "geolocation_lat",
+        "geolocation_lng",
+        "geolocation_city",
+        "geolocation_state",
+    },
+    "category_translation": {"product_category_name", "product_category_name_english"},
+}
+
 SOURCE_FILENAMES: dict[str, tuple[str, ...]] = {
     "customers": ("customers.csv", "olist_customers_dataset.csv"),
     "orders": ("orders.csv", "olist_orders_dataset.csv"),
@@ -25,6 +37,9 @@ SOURCE_FILENAMES: dict[str, tuple[str, ...]] = {
     "products": ("products.csv", "olist_products_dataset.csv"),
     "payments": ("payments.csv", "olist_order_payments_dataset.csv"),
     "reviews": ("reviews.csv", "olist_order_reviews_dataset.csv"),
+    "sellers": ("sellers.csv", "olist_sellers_dataset.csv"),
+    "geolocation": ("geolocation.csv", "olist_geolocation_dataset.csv"),
+    "category_translation": ("product_category_name_translation.csv",),
 }
 
 
@@ -52,6 +67,22 @@ def extract_csvs(raw_directory: Path) -> dict[str, pd.DataFrame]:
             raise ExtractionError(f"{file_path.name} is missing required columns: {columns}")
 
         LOGGER.info("Extracted %s: %s rows", dataset, len(dataframe))
+        datasets[dataset] = dataframe
+
+    for dataset, required_columns in OPTIONAL_DATASETS.items():
+        file_path = next(
+            (raw_directory / filename for filename in SOURCE_FILENAMES[dataset] if (raw_directory / filename).is_file()),
+            None,
+        )
+        if file_path is None:
+            continue
+
+        dataframe = pd.read_csv(file_path)
+        missing_columns = required_columns.difference(dataframe.columns)
+        if missing_columns:
+            columns = ", ".join(sorted(missing_columns))
+            raise ExtractionError(f"{file_path.name} is missing required columns: {columns}")
+        LOGGER.info("Extracted optional %s: %s rows", dataset, len(dataframe))
         datasets[dataset] = dataframe
 
     return datasets

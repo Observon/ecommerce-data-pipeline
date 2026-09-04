@@ -63,6 +63,33 @@ def validate_datasets(datasets: dict[str, pd.DataFrame]) -> QualityResult:
     add_rule("order_items", "negative_amounts", order_items[["price", "freight_value"]].lt(0).any(axis=1) | order_items[["price", "freight_value"]].isna().any(axis=1))
     add_rule("order_items", "referential_integrity_violations", ~order_items["order_id"].isin(valid_order_ids) | ~order_items["product_id"].isin(valid_product_ids))
 
+    if "sellers" in datasets:
+        sellers = datasets["sellers"]
+        add_rule("sellers", "missing_ids", _missing_key(sellers, ["seller_id"]))
+        add_rule("sellers", "duplicates", sellers.duplicated(["seller_id"], keep=False))
+        valid_seller_ids = set(sellers.loc[~invalid_masks["sellers"], "seller_id"])
+        if "seller_id" in order_items:
+            add_rule(
+                "order_items",
+                "seller_integrity_violations",
+                ~order_items["seller_id"].isin(valid_seller_ids) | _missing_key(order_items, ["seller_id"]),
+            )
+
+    if "category_translation" in datasets:
+        translations = datasets["category_translation"]
+        add_rule("category_translation", "missing_ids", _missing_key(translations, ["product_category_name"]))
+        add_rule("category_translation", "duplicates", translations.duplicated(["product_category_name"], keep=False))
+
+    if "geolocation" in datasets:
+        geolocation = datasets["geolocation"]
+        add_rule("geolocation", "missing_ids", _missing_key(geolocation, ["geolocation_zip_code_prefix"]))
+        add_rule("geolocation", "duplicates", geolocation.duplicated(["geolocation_zip_code_prefix"], keep=False))
+        add_rule(
+            "geolocation",
+            "invalid_coordinates",
+            geolocation[["geolocation_lat", "geolocation_lng"]].isna().any(axis=1),
+        )
+
     payments = datasets["payments"]
     payment_key = ["order_id", "payment_sequential"]
     add_rule("payments", "missing_ids", _missing_key(payments, payment_key))
