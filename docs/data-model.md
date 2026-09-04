@@ -8,6 +8,11 @@ customers 1 --- N orders 1 --- N order_items N --- 1 products
                     + --- N payments
                     |
                     + --- N reviews
+                    |
+                    + --- N order_items N --- 1 sellers
+
+customers N --- 1 locations
+sellers   N --- 1 locations
 ```
 
 | Tabela | Chave primaria | Papel |
@@ -16,9 +21,12 @@ customers 1 --- N orders 1 --- N order_items N --- 1 products
 | orders | `order_id` | Evento central do ciclo de compra e entrega. |
 | order_items | (`order_id`, `order_item_id`) | Itens vendidos, preco e frete. |
 | products | `product_id` | Atributos e categoria do produto. |
+| sellers | `seller_id` | Localizacao e identificador do vendedor responsavel pela entrega do item. |
+| geolocation | `geolocation_zip_code_prefix` | Localizacao curada, com uma coordenada mediana por CEP. |
+| category_translation | `product_category_name` | Referencia para enriquecer a categoria com nome em ingles. |
 | payments | (`order_id`, `payment_sequential`) | Meio, parcelas e valor de pagamento. |
 | reviews | (`review_id`, `order_id`) | Avaliacao de experiencia associada ao pedido. O `review_id` pode ocorrer em pedidos distintos no dataset da Olist. |
 
 ## Camada analitica planejada
 
-`fact_sales` tera granularidade de item de pedido. As dimensoes iniciais serao `dim_customer`, `dim_product`, `dim_date` e `dim_payment`. Essa separacao preserva o modelo operacional normalizado e fornece uma estrutura simples para analise.
+`fact_sales` tera granularidade de item de pedido. As dimensoes iniciais serao `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location`. Essa separacao preserva o modelo operacional normalizado e fornece uma estrutura simples para analise.
