@@ -33,22 +33,24 @@
 
 ## Pendencias priorizadas
 
-### 1. Carga operacional PostgreSQL
+### 1. Carga operacional PostgreSQL (em implementacao)
 
-- Criar um modulo de conexao usando as variaveis de ambiente, sem credenciais no codigo.
-- Carregar tabelas na ordem das dependencias, com transacao e carga repetivel.
-- Definir estrategia de upsert ou staging para que uma segunda execucao nao duplique registros.
+- [x] Criar um modulo de conexao usando as variaveis de ambiente, sem credenciais no codigo.
+- [x] Carregar tabelas na ordem das dependencias, com transacao e carga repetivel.
+- [x] Definir estrategia de upsert ou staging para que uma segunda execucao nao duplique registros.
+- [x] Expor a carga pelo argumento `--load-postgres`.
+- [ ] Adicionar teste de integracao contra o PostgreSQL do Compose.
 - Persistir `order_total` e `delivery_days` somente se isso fizer parte do contrato do schema; hoje esses campos existem no Parquet, mas nao no DDL.
 
 **Criterio de aceite:** executar o pipeline duas vezes sobre a mesma entrada e obter o mesmo estado no PostgreSQL, sem violacao de FK ou duplicacao.
 
 ### 2. Modelo analitico
 
-1. Aplicar o schema operacional e corrigir `reviews` para a chave composta.
-2. Implementar carga idempotente e transacional para os Parquets validados.
-3. Criar dimensoes `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location`.
-4. Criar `fact_order_item` na granularidade de item de pedido.
-5. Manter pagamentos em fato separado ou agregar por pedido antes de cruzar com itens, evitando duplicacao de receita por joins de granularidades diferentes.
+1. [x] Aplicar o schema operacional e corrigir `reviews` para a chave composta.
+2. [x] Implementar carga idempotente e transacional para os Parquets validados.
+3. [ ] Criar dimensoes `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location`.
+4. [ ] Criar `fact_order_item` na granularidade de item de pedido.
+5. [ ] Manter pagamentos em fato separado ou agregar por pedido antes de cruzar com itens, evitando duplicacao de receita por joins de granularidades diferentes.
 
 **Criterio de aceite:** uma consulta de receita reconciliar com a soma de `price + freight_value` dos itens, sem multiplicacao causada por pagamentos ou reviews.
 

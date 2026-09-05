@@ -42,7 +42,7 @@ A camada RAW preserva os arquivos recebidos sem alteracao. Isso permite auditori
 - **Quality:** separa linhas validas e invalidas, calcula metricas e gera o relatorio de qualidade.
 - **PROCESSED:** Parquets validados e arquivos de quarentena para reprocessamento e analise de falhas.
 - **Storage:** publica RAW e PROCESSED no S3 quando `--upload-s3` e informado.
-- **Database:** schema operacional preparado; carga ainda pendente.
+- **Database:** aplica o schema operacional e carrega Parquets validados com upsert transacional quando `--load-postgres` e informado.
 
 ## Fronteiras e riscos conhecidos
 

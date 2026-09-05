@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from src.ingestion.extract import ExtractionError, extract_csvs
+from src.database.loader import DatabaseSettings, load_processed_directory
 from src.quality.checks import validate_datasets
 from src.storage.s3 import S3Publisher, S3Settings
 from src.transformation.transform import transform_datasets
@@ -38,6 +39,7 @@ def main(
     raw_directory: Path = SAMPLE_RAW_DIRECTORY,
     processed_directory: Path = PROCESSED_DIRECTORY,
     upload_s3: bool = False,
+    load_postgres: bool = False,
 ) -> None:
     configure_logging()
     logger = logging.getLogger(__name__)
@@ -53,6 +55,9 @@ def main(
     logger.info("Running data quality checks: %s", quality_result.report["overall_status"])
     write_processed_data(processed_directory, quality_result.valid_datasets, quality_result.invalid_datasets, quality_result.report)
     logger.info("Processed data written to %s", processed_directory)
+    if load_postgres:
+        loaded = load_processed_directory(processed_directory, DatabaseSettings.from_environment())
+        logger.info("Loaded datasets into PostgreSQL: %s", loaded)
     if upload_s3:
         publisher = S3Publisher(S3Settings.from_environment())
         raw_keys = publisher.upload_raw_directory(raw_directory)
@@ -71,5 +76,6 @@ if __name__ == "__main__":
     )
     parser.add_argument("--processed-directory", type=Path, default=PROCESSED_DIRECTORY, help="Directory for Parquet files and the quality report.")
     parser.add_argument("--upload-s3", action="store_true", help="Publish RAW and PROCESSED artifacts to the configured S3 bucket.")
+    parser.add_argument("--load-postgres", action="store_true", help="Load validated PROCESSED Parquets into PostgreSQL.")
     arguments = parser.parse_args()
-    main(arguments.raw_directory, arguments.processed_directory, arguments.upload_s3)
+    main(arguments.raw_directory, arguments.processed_directory, arguments.upload_s3, arguments.load_postgres)

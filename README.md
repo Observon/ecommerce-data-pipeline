@@ -69,6 +69,14 @@ O schema pode ser aplicado manualmente depois que o banco estiver disponivel:
 Get-Content sql\00_operational_schema.sql | docker compose exec -T postgres psql -U ecommerce -d ecommerce_dw
 ```
 
+Com o schema aplicado e `POSTGRES_*` configurado no `.env`, carregue os Parquets validados de forma transacional e repetivel:
+
+```powershell
+python -m src.pipeline --load-postgres
+```
+
+Use `--raw-directory` e `--processed-directory` para apontar para entradas e saidas diferentes. A carga usa `ON CONFLICT DO UPDATE` e nao duplica registros em execucoes repetidas.
+
 ## Estrutura
 
 ```text
@@ -77,7 +85,7 @@ data/processed/       Saida tipada em Parquet e relatorio de qualidade
 src/ingestion/        Leitura, validacao estrutural e logs
 src/transformation/   Padronizacao e atributos derivados
 src/quality/          Regras, quarentena e relatorios
-src/database/         Carga PostgreSQL (proxima etapa)
+src/database/         Configuracao e carga idempotente no PostgreSQL
 sql/                  DDL e consultas de negocio
 docs/                 Arquitetura, modelo e qualidade
 tests/                Testes pytest
