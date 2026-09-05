@@ -48,11 +48,11 @@
 
 1. [x] Aplicar o schema operacional e corrigir `reviews` para a chave composta.
 2. [x] Implementar carga idempotente e transacional para os Parquets validados.
-3. [ ] Criar dimensoes `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location`.
-4. [ ] Criar `fact_order_item` na granularidade de item de pedido.
+3. [x] Criar dimensoes `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location` em `sql/02_analytics_schema.sql`.
+4. [x] Criar `fact_order_item` na granularidade de item de pedido.
 5. [ ] Manter pagamentos em fato separado ou agregar por pedido antes de cruzar com itens, evitando duplicacao de receita por joins de granularidades diferentes.
 
-**Criterio de aceite:** uma consulta de receita reconciliar com a soma de `price + freight_value` dos itens, sem multiplicacao causada por pagamentos ou reviews.
+**Criterio de aceite:** uma consulta de receita reconciliar com a soma de `price + freight_value` dos itens, sem multiplicacao causada por pagamentos ou reviews. Falta validar essa reconciliacao em uma instancia PostgreSQL real.
 
 ### 3. Publicacao S3 real
 

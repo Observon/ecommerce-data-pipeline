@@ -29,4 +29,4 @@ sellers   N --- 1 locations
 
 ## Camada analitica planejada
 
-`fact_sales` tera granularidade de item de pedido. As dimensoes iniciais serao `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location`. Essa separacao preserva o modelo operacional normalizado e fornece uma estrutura simples para analise.
+`fact_order_item` tem granularidade de item de pedido, com uma linha por (`order_id`, `order_item_id`). As dimensoes sao `dim_customer`, `dim_product`, `dim_seller`, `dim_date` e `dim_location`, com chaves substitutas e os identificadores operacionais preservados como chaves naturais unicas. Pagamentos e reviews permanecem fora desse fato; devem ser agregados por pedido antes de qualquer cruzamento analitico.
