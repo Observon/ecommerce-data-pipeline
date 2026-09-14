@@ -65,7 +65,7 @@
 
 ### 4. Analise e entrega final
 
-1. Criar queries de receita, ticket medio, produtos, cancelamento, entrega, avaliacao e regiao.
+1. [x] Criar queries de receita, ticket medio, produtos, cancelamento, entrega e avaliacao em `sql/03_business_queries.sql`.
 2. Construir notebook orientado a perguntas de negocio e insights.
 3. Adicionar testes de integracao, screenshots do pipeline e revisao final do README.
 
