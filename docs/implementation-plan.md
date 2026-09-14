@@ -7,7 +7,7 @@
 - O processamento produz Parquet, quarentena e relatorio de qualidade.
 - As fontes opcionais `sellers`, `geolocation` e `category_translation` sao descobertas automaticamente quando presentes, com transformacoes e regras de qualidade proprias.
 - A geolocalizacao e reduzida a uma linha por CEP pela mediana de latitude e longitude; a RAW permanece sem alteracao.
-- O schema operacional PostgreSQL esta versionado e o Compose fornece um banco local, mas ainda nao existe uma rotina de carga.
+- O schema operacional PostgreSQL esta versionado e a carga idempotente esta disponivel em `src/database/loader.py`; a validacao foi executada em uma instancia PostgreSQL local recriada.
 - A execucao contra o dataset completo recebeu 99.441 pedidos e 112.650 itens. A chave correta de `reviews` e (`review_id`, `order_id`), pois `review_id` nao e globalmente unico.
 
 ## Concluido
@@ -39,7 +39,7 @@
 - [x] Carregar tabelas na ordem das dependencias, com transacao e carga repetivel.
 - [x] Definir estrategia de upsert ou staging para que uma segunda execucao nao duplique registros.
 - [x] Expor a carga pelo argumento `--load-postgres`.
-- [ ] Adicionar teste de integracao contra o PostgreSQL do Compose.
+- [x] Adicionar teste de integracao opt-in contra uma instancia PostgreSQL configurada por `POSTGRES_*`.
 - Persistir `order_total` e `delivery_days` somente se isso fizer parte do contrato do schema; hoje esses campos existem no Parquet, mas nao no DDL.
 
 **Criterio de aceite:** executar o pipeline duas vezes sobre a mesma entrada e obter o mesmo estado no PostgreSQL, sem violacao de FK ou duplicacao.

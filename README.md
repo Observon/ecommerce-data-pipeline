@@ -77,6 +77,13 @@ python -m src.pipeline --load-postgres
 
 Use `--raw-directory` e `--processed-directory` para apontar para entradas e saidas diferentes. A carga usa `ON CONFLICT DO UPDATE` e nao duplica registros em execucoes repetidas.
 
+Para executar o teste de integracao contra uma instancia PostgreSQL ja preparada:
+
+```powershell
+$env:POSTGRES_INTEGRATION = "1"
+python -m pytest -q tests/test_database_integration.py
+```
+
 ## Estrutura
 
 ```text
