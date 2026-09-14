@@ -69,10 +69,23 @@
 2. Construir notebook orientado a perguntas de negocio e insights.
 3. Adicionar testes de integracao, screenshots do pipeline e revisao final do README.
 
+### 5. CI/CD
+
+- [ ] Criar workflow de CI para push e pull request.
+- [ ] Executar `pytest`, incluindo o teste de integracao PostgreSQL em servico/container.
+- [ ] Validar sintaxe dos arquivos SQL, lint e verificacao de tipos.
+- [ ] Bloquear merge quando as verificacoes obrigatorias falharem.
+- [ ] Criar etapa de CD para publicar artefatos no S3 usando secrets externos.
+- [ ] Documentar ambientes, permissao minima, aprovacao e rollback.
+
+**Criterio de aceite:** um pull request executa automaticamente as verificacoes de qualidade e nao pode ser integrado com falhas; a publicacao S3 ocorre somente em branch ou workflow autorizado.
+
 ## Ordem recomendada de execucao
 
 1. Implementar a carga PostgreSQL e cobri-la com um teste de integracao no Compose.
 2. Validar reconciliacao entre Parquet, tabelas operacionais e consulta de receita.
 3. Provisionar e testar S3 real em um ambiente controlado.
-4. Criar o notebook e ampliar as consultas de negocio.
-5. Fechar testes end-to-end, evidencias e documentacao operacional.
+4. Criar o workflow de CI e torna-lo obrigatorio para pull requests.
+5. Criar o notebook e ampliar as consultas de negocio.
+6. Configurar CD para S3 com secrets e aprovacao.
+7. Fechar testes end-to-end, evidencias e documentacao operacional.

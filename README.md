@@ -117,7 +117,9 @@ O status detalhado, os criterios de aceite e as dependencias estao em [implement
 2. **Modelo analitico:** criar dimensoes, fato de itens e estrategia para evitar duplicacao de receita ao cruzar pagamentos.
 3. **S3 real:** configurar bucket, regiao, credenciais fora do repositorio e permissao minima `s3:PutObject`; o upload ja esta implementado e testado com cliente simulado.
 4. **Analise:** ampliar `sql/01_revenue.sql` e criar notebook com perguntas de negocio e insights reproduziveis.
-5. **Confiabilidade:** adicionar testes de integracao com PostgreSQL, teste de execucao end-to-end e observabilidade basica.
-6. **Entrega:** atualizar evidencias de execucao, revisar o README e documentar operacao e recuperacao de falhas.
+5. **CI:** automatizar testes, verificacoes SQL, lint e tipos em push e pull request.
+6. **CD:** publicar artefatos no S3 apenas em workflows autorizados, com secrets externos e rollback documentado.
+7. **Confiabilidade:** completar teste end-to-end, observabilidade basica e evidencias de execucao.
+8. **Entrega:** revisar o README e documentar operacao e recuperacao de falhas.
 
 Itens ja implementados e que nao devem voltar para a fila: ingestao dos seis datasets obrigatorios, suporte as tres fontes opcionais, transformacoes tipadas, curadoria de geolocalizacao, Parquet, quarentena, relatorio de qualidade e publicacao S3 com cliente simulado.
