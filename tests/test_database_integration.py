@@ -7,7 +7,6 @@ import pytest
 
 from src.database.loader import DatabaseSettings, load_processed_directory
 
-
 pytestmark = pytest.mark.integration
 
 

@@ -42,6 +42,9 @@ jobs:
       - name: Compile Python sources
         run: python -m compileall -q src tests
 
+      - name: Run Ruff
+        run: python -m ruff check src tests
+
       - name: Apply operational schema
         env:
           PGPASSWORD: ecommerce

@@ -105,6 +105,7 @@ tests/                Testes pytest
 ## CI
 
 O workflow em `.github/workflows/ci.yml` roda em pushes para `main` e pull requests. Ele inicia PostgreSQL, aplica os schemas, processa a amostra, executa a carga idempotente e roda a suíte completa com o teste de integração habilitado.
+Ele também compila os fontes Python e executa `ruff check` em `src/` e `tests/`.
 
 ## Decisoes tecnicas
 

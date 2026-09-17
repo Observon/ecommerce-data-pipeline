@@ -9,8 +9,8 @@ from typing import Any, Callable
 
 import pandas as pd
 import psycopg
-from psycopg import sql
 from dotenv import load_dotenv
+from psycopg import sql
 
 
 class DatabaseError(RuntimeError):

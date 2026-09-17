@@ -74,7 +74,8 @@
 - [x] Criar workflow de CI para push e pull request em `.github/workflows/ci.yml`.
 - [x] Executar `pytest`, incluindo o teste de integracao PostgreSQL em servico/container.
 - [x] Validar os schemas SQL aplicando-os em um PostgreSQL de servico e compilar o Python.
-- [ ] Adicionar lint e verificacao de tipos quando as ferramentas forem incorporadas ao ambiente do projeto.
+- [x] Adicionar lint reproduzivel com Ruff ao ambiente do projeto e ao workflow.
+- [ ] Adicionar verificacao de tipos quando a politica de tipos e os stubs das dependencias forem definidos.
 - [ ] Bloquear merge quando as verificacoes obrigatorias falharem.
 - [ ] Criar etapa de CD para publicar artefatos no S3 usando secrets externos.
 - [ ] Documentar ambientes, permissao minima, aprovacao e rollback.

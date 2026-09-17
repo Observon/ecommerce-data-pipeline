@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import logging
 import argparse
 import json
+import logging
 from pathlib import Path
 
-from src.ingestion.extract import ExtractionError, extract_csvs
 from src.database.loader import DatabaseSettings, load_processed_directory
+from src.ingestion.extract import ExtractionError, extract_csvs
 from src.quality.checks import validate_datasets
 from src.storage.s3 import S3Publisher, S3Settings
 from src.transformation.transform import transform_datasets
