@@ -38,3 +38,12 @@ def test_quality_allows_a_review_id_on_different_orders() -> None:
     result = validate_datasets(datasets)
 
     assert result.report["datasets"]["reviews"]["invalid_rows"] == 0
+
+
+def test_quality_flags_empty_customer_id_as_missing() -> None:
+    datasets = transform_datasets(extract_csvs(Path("data/raw/sample")))
+    datasets["customers"].loc[0, "customer_id"] = ""
+
+    result = validate_datasets(datasets)
+
+    assert result.report["datasets"]["customers"]["missing_ids"] == 1
