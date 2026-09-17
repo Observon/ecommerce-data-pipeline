@@ -71,9 +71,10 @@
 
 ### 5. CI/CD
 
-- [ ] Criar workflow de CI para push e pull request.
-- [ ] Executar `pytest`, incluindo o teste de integracao PostgreSQL em servico/container.
-- [ ] Validar sintaxe dos arquivos SQL, lint e verificacao de tipos.
+- [x] Criar workflow de CI para push e pull request em `.github/workflows/ci.yml`.
+- [x] Executar `pytest`, incluindo o teste de integracao PostgreSQL em servico/container.
+- [x] Validar os schemas SQL aplicando-os em um PostgreSQL de servico e compilar o Python.
+- [ ] Adicionar lint e verificacao de tipos quando as ferramentas forem incorporadas ao ambiente do projeto.
 - [ ] Bloquear merge quando as verificacoes obrigatorias falharem.
 - [ ] Criar etapa de CD para publicar artefatos no S3 usando secrets externos.
 - [ ] Documentar ambientes, permissao minima, aprovacao e rollback.

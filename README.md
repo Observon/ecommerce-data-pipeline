@@ -102,6 +102,10 @@ tests/                Testes pytest
 
 `sql/00_operational_schema.sql` cria o modelo operacional com PKs, FKs, checks e indices. Depois da carga operacional, `sql/02_analytics_schema.sql` cria e popula as dimensoes e o fato `fact_order_item`. `sql/01_revenue.sql` calcula receita mensal e volume de pedidos entregues a partir desse fato. `sql/03_business_queries.sql` reune consultas de ticket medio, pagamentos, produtos, status, entrega e avaliacoes.
 
+## CI
+
+O workflow em `.github/workflows/ci.yml` roda em pushes para `main` e pull requests. Ele inicia PostgreSQL, aplica os schemas, processa a amostra, executa a carga idempotente e roda a suíte completa com o teste de integração habilitado.
+
 ## Decisoes tecnicas
 
 - RAW e imutavel para auditoria e reprocessamento.
