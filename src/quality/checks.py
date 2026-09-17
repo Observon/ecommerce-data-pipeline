@@ -20,7 +20,9 @@ def _empty_mask(dataframe: pd.DataFrame) -> pd.Series:
 
 
 def _missing_key(dataframe: pd.DataFrame, columns: list[str]) -> pd.Series:
-    return dataframe[columns].isna().any(axis=1) | dataframe[columns].eq("").any(axis=1)
+    key_columns = dataframe[columns]
+    blank_values = key_columns.fillna("").astype("string") == ""
+    return key_columns.isna().any(axis=1) | blank_values.any(axis=1)
 
 
 def _report_entry(dataframe: pd.DataFrame, invalid_mask: pd.Series, metrics: dict[str, int]) -> dict[str, int | str]:
