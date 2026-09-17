@@ -45,6 +45,9 @@ jobs:
       - name: Run Ruff
         run: python -m ruff check src tests
 
+      - name: Run mypy
+        run: python -m mypy src tests
+
       - name: Apply operational schema
         env:
           PGPASSWORD: ecommerce
