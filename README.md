@@ -111,6 +111,8 @@ O CD está em `.github/workflows/cd-s3.yml` e só pode ser acionado manualmente.
 
 O rollback de dados deve ser feito por reprocessamento de uma entrada conhecida em novos prefixos versionados ou usando versionamento nativo do bucket. O workflow não deve reutilizar o mesmo prefixo para releases diferentes sem essa proteção.
 
+Para proteger a branch `main`, habilite nas regras do repositório: pull request obrigatório, aprovação antes do merge, resolução de conversas e o check obrigatório `test`. Desabilite o push direto e permita que apenas o CI verde seja integrado.
+
 ## Decisoes tecnicas
 
 - RAW e imutavel para auditoria e reprocessamento.
