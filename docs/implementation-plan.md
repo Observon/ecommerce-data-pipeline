@@ -77,8 +77,8 @@
 - [x] Adicionar lint reproduzivel com Ruff ao ambiente do projeto e ao workflow.
 - [x] Adicionar verificacao de tipos com mypy e stubs do pandas ao ambiente do projeto e ao workflow.
 - [ ] Bloquear merge quando as verificacoes obrigatorias falharem.
-- [ ] Criar etapa de CD para publicar artefatos no S3 usando secrets externos.
-- [ ] Documentar ambientes, permissao minima, aprovacao e rollback.
+- [x] Criar etapa de CD manual para publicar artefatos no S3 usando secrets externos em `.github/workflows/cd-s3.yml`.
+- [x] Documentar ambiente protegido, permissao minima, aprovacao e rollback por prefixo versionado ou versionamento nativo do bucket.
 
 **Criterio de aceite:** um pull request executa automaticamente as verificacoes de qualidade e nao pode ser integrado com falhas; a publicacao S3 ocorre somente em branch ou workflow autorizado.
 

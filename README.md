@@ -107,6 +107,10 @@ tests/                Testes pytest
 O workflow em `.github/workflows/ci.yml` roda em pushes para `main` e pull requests. Ele inicia PostgreSQL, aplica os schemas, processa a amostra, executa a carga idempotente e roda a suíte completa com o teste de integração habilitado.
 Ele também compila os fontes Python, executa `ruff check` em `src/` e `tests/` e verifica os tipos com `mypy`.
 
+O CD está em `.github/workflows/cd-s3.yml` e só pode ser acionado manualmente. Configure o environment protegido `production` no GitHub, defina os secrets `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`, e as variables `AWS_REGION`, `S3_BUCKET`, `S3_RAW_PREFIX` e `S3_PROCESSED_PREFIX`. A publicação exige a confirmação `confirm_publish` e deve ser aprovada pelo environment.
+
+O rollback de dados deve ser feito por reprocessamento de uma entrada conhecida em novos prefixos versionados ou usando versionamento nativo do bucket. O workflow não deve reutilizar o mesmo prefixo para releases diferentes sem essa proteção.
+
 ## Decisoes tecnicas
 
 - RAW e imutavel para auditoria e reprocessamento.

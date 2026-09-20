@@ -1,0 +1,47 @@
+name: Publish pipeline artifacts to S3
+
+on:
+  workflow_dispatch:
+    inputs:
+      raw_directory:
+        description: "Directory containing the input CSV files"
+        required: true
+        default: "data/raw/sample"
+        type: string
+      confirm_publish:
+        description: "Confirm publication to the production S3 environment"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: inputs.confirm_publish == true
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run pipeline and publish artifacts
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          S3_BUCKET: ${{ vars.S3_BUCKET }}
+          S3_RAW_PREFIX: ${{ vars.S3_RAW_PREFIX }}
+          S3_PROCESSED_PREFIX: ${{ vars.S3_PROCESSED_PREFIX }}
+        run: python -m src.pipeline --raw-directory "${{ inputs.raw_directory }}" --upload-s3
