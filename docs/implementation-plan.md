@@ -76,20 +76,18 @@
 - [x] Validar os schemas SQL aplicando-os em um PostgreSQL de servico e compilar o Python.
 - [x] Adicionar lint reproduzivel com Ruff ao ambiente do projeto e ao workflow.
 - [x] Adicionar verificacao de tipos com mypy e stubs do pandas ao ambiente do projeto e ao workflow.
-- [ ] Configurar no GitHub a protecao da `main` com pull request, aprovacao e o check obrigatorio `test`.
+- [x] Configurar no GitHub a protecao da `main` com pull request, aprovacao e o check obrigatorio `test`.
 - [x] Criar etapa de CD manual para publicar artefatos no S3 usando secrets externos em `.github/workflows/cd-s3.yml`.
 - [x] Documentar ambiente protegido, permissao minima, aprovacao e rollback por prefixo versionado ou versionamento nativo do bucket.
 
 **Criterio de aceite:** um pull request executa automaticamente as verificacoes de qualidade e nao pode ser integrado com falhas; a publicacao S3 ocorre somente em branch ou workflow autorizado.
 
-O workflow ja publica o check `test`; a protecao da branch e uma configuracao administrativa do repositorio e deve ser aplicada no GitHub.
+O workflow publica o check `test` e a protecao da branch foi aplicada no GitHub.
 
 ## Ordem recomendada de execucao
 
-1. Implementar a carga PostgreSQL e cobri-la com um teste de integracao no Compose.
-2. Validar reconciliacao entre Parquet, tabelas operacionais e consulta de receita.
-3. Provisionar e testar S3 real em um ambiente controlado.
-4. Criar o workflow de CI e torna-lo obrigatorio para pull requests.
-5. Criar o notebook e ampliar as consultas de negocio.
-6. Configurar CD para S3 com secrets e aprovacao.
-7. Fechar testes end-to-end, evidencias e documentacao operacional.
+1. Provisionar e testar S3 real em um ambiente controlado.
+2. Criar o notebook e ampliar os insights de negocio.
+3. Executar um teste end-to-end completo com CI e CD.
+4. Registrar evidencias, screenshots e resultados da publicacao.
+5. Fechar a revisao da documentacao operacional e do README.
